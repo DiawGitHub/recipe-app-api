@@ -2,7 +2,6 @@
 Database models.
 """
 from django.conf import settings
-
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -45,8 +44,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
 
+
 class Recipe(models.Model):
-    """Recipe objects."""
+    """Recipe object."""
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
