@@ -1,5 +1,5 @@
 """
-Django cmmand to wait for the database to be available.
+Django command to wait for the database to be available.
 """
 import time
 
@@ -21,7 +21,7 @@ class Command(BaseCommand):
                 self.check(databases=['default'])
                 db_up = True
             except (Psycopg2OpError, OperationalError):
-                self.stdout.write('Database unavailable, wait 1 secondd...')
+                self.stdout.write('Database unavailable, waiting 1 second...')
                 time.sleep(1)
 
-        self.stdout.write(self.style.SUCCESS('Database is available!'))
+        self.stdout.write(self.style.SUCCESS('Database available!'))

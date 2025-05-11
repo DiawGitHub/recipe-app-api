@@ -40,7 +40,7 @@ class PublicUserApiTest(TestCase):
         self.assertNotIn('password', res.data)
 
     def test_user_with_email_exists_error(self):
-        """Test error returned if user iwth email exists."""
+        """Test error returned if user with email exists."""
         payload = {
             'email': 'test@example.com',
             'password': 'testpass123',
@@ -56,7 +56,7 @@ class PublicUserApiTest(TestCase):
         payload = {
             'email': 'test@example.com',
             'password': 'pw',
-            'name': 'Test Name',
+            'name': 'Test name',
         }
         res = self.client.post(CREATE_USER_URL, payload)
 
@@ -94,22 +94,31 @@ class PublicUserApiTest(TestCase):
         self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_create_token_email_not_found(self):
+        """Test error returned if user not found for given email."""
+        payload = {'email': 'test@example.com', 'password': 'pass123'}
+        res = self.client.post(TOKEN_URL, payload)
+
+        self.assertNotIn('token', res.data)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_create_token_blank_password(self):
         """Test posting a blank password returns an error."""
-        payload = {'email': 'test@example.ocm', 'password': ''}
+        payload = {'email': 'test@example.com', 'password': ''}
         res = self.client.post(TOKEN_URL, payload)
 
         self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_retrieve_user_unauthorized(self):
-        '""Test authentication is required for users.'
+        """Test authentication is required for users."""
         res = self.client.get(ME_URL)
 
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
+
 class PrivateUserApiTests(TestCase):
-    """Test API requests that requrie authentication."""
+    """Test API requests that require authentication."""
 
     def setUp(self):
         self.user = create_user(
